@@ -4,8 +4,17 @@ import JSONAPI from "../api/JSONplaceholder";
 export const fetchPostsAndUser = () => {
   return async (dispatch, getState) => {
     await dispatch(fetchPosts());
-    const usersId = _.uniq(_.map(getState().posts, "userId"));
-    usersId.forEach(id => dispatch(fetchUser(id)));
+
+    // const usersId = _.uniq(_.map(getState().posts, "userId"));
+    // usersId.forEach(id => dispatch(fetchUser(id)));
+
+    // Above Line with lodash helper chain function ---- refactor
+
+    _.chain(getState().posts)
+      .map("userId")
+      .uniq()
+      .forEach(id => dispatch(fetchUser(id)))
+      .value();
   };
 };
 
